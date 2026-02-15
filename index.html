@@ -68,7 +68,7 @@
             display: flex;
             flex-wrap: wrap;
             justify-content: center;
-            gap: 20px 30px;
+            gap: 15px 25px;
             margin-bottom: 30px;
             background: rgba(0,0,0,0.25);
             padding: 20px 25px;
@@ -81,7 +81,7 @@
             display: flex;
             align-items: center;
             gap: 8px;
-            font-size: 1.3rem;
+            font-size: 1.2rem;
             font-weight: 600;
             cursor: pointer;
             transition: all 0.2s;
@@ -89,6 +89,7 @@
             border-radius: 40px;
             background: rgba(30, 25, 20, 0.6);
             border: 1px solid transparent;
+            white-space: nowrap;
         }
 
         .persona-selector label:hover {
@@ -104,7 +105,8 @@
             cursor: pointer;
         }
 
-        #igorPanel {
+        /* Панели для персонажей (Игорь, Иван, Никита) */
+        .persona-panel {
             background: #1e1a14;
             border: 2px solid #735e3a;
             border-radius: 40px;
@@ -119,7 +121,7 @@
             transition: all 0.3s ease;
         }
 
-        #igorPanel p {
+        .persona-panel p {
             font-size: 1.8rem;
             font-family: 'Cinzel', serif;
             color: #edd9b0;
@@ -129,7 +131,7 @@
             gap: 10px;
         }
 
-        #igorPanel select {
+        .persona-panel select {
             background: #2a241c;
             border: 2px solid #9b7e55;
             border-radius: 50px;
@@ -143,9 +145,33 @@
             box-shadow: inset 0 2px 5px #00000055, 0 0 10px #b8860b77;
         }
 
-        #igorPanel select option {
+        .persona-panel select option {
             background: #1f1a14;
             color: #f0dbb4;
+        }
+
+        .ivan-epithet-btn {
+            background: #3a2e1e;
+            border: 2px solid #c9a45b;
+            color: #ffefd1;
+            font-family: 'Cinzel', serif;
+            font-size: 1.3rem;
+            padding: 10px 25px;
+            border-radius: 40px;
+            cursor: pointer;
+            transition: all 0.2s;
+            box-shadow: 0 5px 0 #1f1a14;
+        }
+
+        .ivan-epithet-btn:hover {
+            background: #5e4a2e;
+            transform: translateY(-2px);
+            box-shadow: 0 7px 0 #1f1a14, 0 0 15px gold;
+        }
+
+        .ivan-epithet-btn:active {
+            transform: translateY(5px);
+            box-shadow: 0 2px 0 #1f1a14;
         }
 
         .nations-grid {
@@ -261,6 +287,7 @@
             gap: 20px;
             transition: all 0.4s;
             min-height: 120px;
+            flex-wrap: wrap;
         }
 
         .result span {
@@ -314,6 +341,74 @@
             opacity: 0.2;
         }
 
+        /* Модальное окно для эпитетов Ивана */
+        .epithet-modal {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.95);
+            backdrop-filter: blur(5px);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.3s;
+        }
+
+        .epithet-modal.active {
+            opacity: 1;
+            pointer-events: all;
+        }
+
+        .epithet-content {
+            background: #1e1b16;
+            border: 3px solid #bfa36b;
+            border-radius: 50px;
+            padding: 40px;
+            max-width: 90%;
+            max-height: 80%;
+            overflow-y: auto;
+            box-shadow: 0 0 50px #b8860b;
+            text-align: center;
+        }
+
+        .epithet-list {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 15px 30px;
+            justify-content: center;
+            font-family: 'Cinzel', serif;
+            font-size: 1.8rem;
+            color: #f3dbb6;
+            margin: 30px 0;
+        }
+
+        .epithet-list span {
+            background: #2a241c;
+            padding: 10px 20px;
+            border-radius: 40px;
+            border: 1px solid #b8860b;
+            box-shadow: 0 5px 0 #0a0806;
+        }
+
+        .close-modal {
+            background: #bfa36b;
+            border: none;
+            color: #0a0806;
+            font-family: 'Cinzel', serif;
+            font-size: 1.8rem;
+            padding: 15px 40px;
+            border-radius: 50px;
+            cursor: pointer;
+            font-weight: bold;
+            margin-top: 20px;
+        }
+
+        .close-modal:hover {
+            background: #e9c57f;
+        }
+
         @media (max-width: 650px) {
             .container { padding: 25px 15px; }
             h1 { font-size: 1.8rem; }
@@ -332,13 +427,48 @@
             <label><input type="radio" name="persona" value="stepa"> 👑 Степа</label>
             <label><input type="radio" name="persona" value="igor"> ⚔️ Игорь</label>
             <label><input type="radio" name="persona" value="matvey"> 🐉 Матвей</label>
+            <label><input type="radio" name="persona" value="lev"> 🦁 Лев</label>
+            <label><input type="radio" name="persona" value="ivan"> 👑 Иван</label>
+            <label><input type="radio" name="persona" value="nikita"> 🌟 Никита</label>
             <label><input type="radio" name="persona" value="sxs"> 🎲 sxs</label>
             <label><input type="radio" name="persona" value="other" checked> 🌍 Другой</label>
         </div>
 
-        <div id="igorPanel" style="display: none;">
+        <!-- Панель Игоря -->
+        <div id="igorPanel" class="persona-panel" style="display: none;">
             <p>Игорь, родной, спасибо, что пришёл ❤️</p>
             <select id="igorSelect">
+                <option value="arryn">Аррены</option>
+                <option value="greyjoy">Грейджои</option>
+                <option value="lannister">Ланнистеры</option>
+                <option value="stark">Старки</option>
+                <option value="martell">Мартеллы</option>
+                <option value="tyrell">Тиреллы</option>
+                <option value="baratheon">Баратеоны</option>
+                <option value="targaryen">Таргариены</option>
+            </select>
+        </div>
+
+        <!-- Панель Ивана -->
+        <div id="ivanPanel" class="persona-panel" style="display: none;">
+            <p>Иван Великий Прекрасный Очаровательный Обаятельный</p>
+            <button class="ivan-epithet-btn" id="showEpithetsBtn">✨ Раскрыть эпитеты</button>
+            <select id="ivanSelect">
+                <option value="arryn">Аррены</option>
+                <option value="greyjoy">Грейджои</option>
+                <option value="lannister">Ланнистеры</option>
+                <option value="stark">Старки</option>
+                <option value="martell">Мартеллы</option>
+                <option value="tyrell">Тиреллы</option>
+                <option value="baratheon">Баратеоны</option>
+                <option value="targaryen">Таргариены</option>
+            </select>
+        </div>
+
+        <!-- Панель Никиты -->
+        <div id="nikitaPanel" class="persona-panel" style="display: none;">
+            <p>Никита, good boy 😇</p>
+            <select id="nikitaSelect">
                 <option value="arryn">Аррены</option>
                 <option value="greyjoy">Грейджои</option>
                 <option value="lannister">Ланнистеры</option>
@@ -357,10 +487,20 @@
         <div class="result" id="result">🏰 Сделайте выбор</div>
     </div>
 
+    <!-- Модальное окно эпитетов Ивана -->
+    <div class="epithet-modal" id="epithetModal">
+        <div class="epithet-content">
+            <h2 style="font-family: 'Cinzel'; color: #f3dbb6;">Все эпитеты Ивана</h2>
+            <div class="epithet-list" id="epithetList"></div>
+            <button class="close-modal" id="closeEpithetModal">Закрыть</button>
+        </div>
+    </div>
+
     <div class="matvey-message" id="matveyMessage">ОПЯТЬ СОСАТБ</div>
 
     <script>
         (function() {
+            // Данные наций
             const nationsData = [
                 { id: 'arryn', name: 'Аррены', icon: '🦅' },
                 { id: 'greyjoy', name: 'Грейджои', icon: '🦑' },
@@ -375,16 +515,62 @@
             let nations = nationsData.map(n => ({ ...n, excluded: false }));
             let currentPersona = 'other';
             let igorChoice = 'lannister';
+            let ivanChoice = 'lannister';
+            let nikitaChoice = 'lannister';
 
+            // Элементы
             const nationsGrid = document.getElementById('nationsGrid');
             const igorPanel = document.getElementById('igorPanel');
+            const ivanPanel = document.getElementById('ivanPanel');
+            const nikitaPanel = document.getElementById('nikitaPanel');
             const igorSelect = document.getElementById('igorSelect');
+            const ivanSelect = document.getElementById('ivanSelect');
+            const nikitaSelect = document.getElementById('nikitaSelect');
             const matveyMsg = document.getElementById('matveyMessage');
             const resultDiv = document.getElementById('result');
             const chooseBtn = document.getElementById('chooseBtn');
             const personaRadios = document.querySelectorAll('input[name="persona"]');
+            const epithetModal = document.getElementById('epithetModal');
+            const epithetList = document.getElementById('epithetList');
+            const showEpithetsBtn = document.getElementById('showEpithetsBtn');
+            const closeModalBtn = document.getElementById('closeEpithetModal');
 
-            // Функция показа сообщения для Матвея (на 3 сек)
+            // Массив эпитетов (20 штук)
+            const epithets = [
+                "Великий", "Прекрасный", "Очаровательный", "Обаятельный", "Мудрый",
+                "Непобедимый", "Лучезарный", "Благородный", "Справедливый", "Могущественный",
+                "Несравненный", "Добросердечный", "Храбрый", "Грозный", "Милосердный",
+                "Быстрый", "Искусный", "Великолепный", "Божественный", "Бессмертный"
+            ];
+
+            // Заполнить список эпитетов в модалке
+            function renderEpithets() {
+                epithetList.innerHTML = '';
+                epithets.forEach(e => {
+                    const span = document.createElement('span');
+                    span.textContent = e;
+                    epithetList.appendChild(span);
+                });
+            }
+            renderEpithets();
+
+            // Открыть модалку
+            showEpithetsBtn.addEventListener('click', () => {
+                epithetModal.classList.add('active');
+            });
+
+            closeModalBtn.addEventListener('click', () => {
+                epithetModal.classList.remove('active');
+            });
+
+            // Закрыть по клику вне контента (на бэкграунд)
+            epithetModal.addEventListener('click', (e) => {
+                if (e.target === epithetModal) {
+                    epithetModal.classList.remove('active');
+                }
+            });
+
+            // Функция показа сообщения для Матвея
             function showMatveyMessage() {
                 matveyMsg.classList.add('visible');
                 setTimeout(() => {
@@ -392,7 +578,7 @@
                 }, 3000);
             }
 
-            // Отрисовка карточек наций (без чекбоксов, кликабельно)
+            // Отрисовка карточек наций
             function renderNations() {
                 nationsGrid.innerHTML = '';
                 nations.forEach((nation) => {
@@ -400,7 +586,6 @@
                     card.className = `nation-card ${nation.excluded ? 'excluded' : ''}`;
                     card.dataset.id = nation.id;
 
-                    // Индикатор исключения (замочек или крестик)
                     const indicator = nation.excluded ? '<div class="excluded-indicator">🔒</div>' : '';
 
                     card.innerHTML = `
@@ -409,30 +594,35 @@
                         ${indicator}
                     `;
 
-                    // Клик по карточке переключает excluded
-                    card.addEventListener('click', (e) => {
-                        // Чтобы клик не срабатывал лишний раз, если есть внутренние элементы (но их нет)
+                    card.addEventListener('click', () => {
                         const id = card.dataset.id;
                         const nation = nations.find(n => n.id === id);
                         if (nation) {
                             nation.excluded = !nation.excluded;
                         }
-                        renderNations(); // перерисовываем
+                        renderNations();
                     });
 
                     nationsGrid.appendChild(card);
                 });
             }
 
-            // Обновление видимости панели Игоря
+            // Обновление видимости панелей
             function updatePersonaUI() {
                 igorPanel.style.display = 'none';
+                ivanPanel.style.display = 'none';
+                nikitaPanel.style.display = 'none';
+
                 if (currentPersona === 'igor') {
                     igorPanel.style.display = 'flex';
+                } else if (currentPersona === 'ivan') {
+                    ivanPanel.style.display = 'flex';
+                } else if (currentPersona === 'nikita') {
+                    nikitaPanel.style.display = 'flex';
                 }
             }
 
-            // Обработчик изменения радио-кнопок
+            // Обработчик радио-кнопок
             personaRadios.forEach(radio => {
                 radio.addEventListener('change', (e) => {
                     currentPersona = e.target.value;
@@ -440,12 +630,75 @@
                 });
             });
 
-            // Изменение выбора Игоря
+            // Сохранение выборов
             igorSelect.addEventListener('change', (e) => {
                 igorChoice = e.target.value;
             });
+            ivanSelect.addEventListener('change', (e) => {
+                ivanChoice = e.target.value;
+            });
+            nikitaSelect.addEventListener('change', (e) => {
+                nikitaChoice = e.target.value;
+            });
 
-            // Функция броска кубиков для sxs
+            // Основная функция выбора
+            function chooseNation() {
+                // Сначала проверим особые случаи, которые не используют нации
+                if (currentPersona === 'sxs') {
+                    playBackgammon();
+                    return;
+                }
+                if (currentPersona === 'lev') {
+                    resultDiv.innerHTML = `<span>💀</span> Сори, ты умер на 0 ходу`;
+                    return;
+                }
+
+                let resultNation = null;
+                let extraText = '';
+
+                if (currentPersona === 'stepa') {
+                    resultNation = nations.find(n => n.id === 'stark');
+                } else if (currentPersona === 'igor') {
+                    resultNation = nations.find(n => n.id === igorChoice);
+                } else if (currentPersona === 'matvey') {
+                    resultNation = nations.find(n => n.id === 'lannister');
+                    showMatveyMessage();
+                } else if (currentPersona === 'ivan') {
+                    resultNation = nations.find(n => n.id === ivanChoice);
+                    // Случайная мотивационная фраза
+                    const motivations = [
+                        "Ты лучший король, ты обязательно выиграешь!",
+                        "Ты обаятелен, у тебя всё получится!",
+                        "Великие победы ждут тебя!",
+                        "Твоя мудрость не знает границ!",
+                        "Железный трон падёт к твоим ногам!"
+                    ];
+                    extraText = motivations[Math.floor(Math.random() * motivations.length)];
+                } else if (currentPersona === 'nikita') {
+                    resultNation = nations.find(n => n.id === nikitaChoice);
+                    extraText = 'good boy';
+                } else { // other
+                    const available = nations.filter(n => !n.excluded);
+                    if (available.length === 0) {
+                        resultDiv.innerHTML = `<span>❌</span> Нет доступных наций (все исключены)`;
+                        return;
+                    }
+                    const randomIndex = Math.floor(Math.random() * available.length);
+                    resultNation = available[randomIndex];
+                }
+
+                if (resultNation) {
+                    let html = `<span>${resultNation.icon}</span> ${resultNation.name}`;
+                    if (extraText) {
+                        html += `<div style="font-size: 1.5rem; width: 100%;">✨ ${extraText} ✨</div>`;
+                    }
+                    resultDiv.innerHTML = html;
+                } else {
+                    resultDiv.innerHTML = `<span>⚡</span> Ошибка выбора`;
+                }
+            }
+
+            // Игра в нарды для sxs
             function playBackgammon() {
                 const dice1 = Math.floor(Math.random() * 6) + 1;
                 const dice2 = Math.floor(Math.random() * 6) + 1;
@@ -462,40 +715,6 @@
                 `;
             }
 
-            // Основная логика выбора нации
-            function chooseNation() {
-                // Если выбран sxs — запускаем нарды
-                if (currentPersona === 'sxs') {
-                    playBackgammon();
-                    return;
-                }
-
-                let resultNation = null;
-
-                if (currentPersona === 'stepa') {
-                    resultNation = nations.find(n => n.id === 'stark');
-                } else if (currentPersona === 'igor') {
-                    resultNation = nations.find(n => n.id === igorChoice);
-                } else if (currentPersona === 'matvey') {
-                    resultNation = nations.find(n => n.id === 'lannister');
-                    showMatveyMessage(); // показываем надпись на 3 сек
-                } else { // other
-                    const available = nations.filter(n => !n.excluded);
-                    if (available.length === 0) {
-                        resultDiv.innerHTML = `<span>❌</span> Нет доступных наций (все исключены)`;
-                        return;
-                    }
-                    const randomIndex = Math.floor(Math.random() * available.length);
-                    resultNation = available[randomIndex];
-                }
-
-                if (resultNation) {
-                    resultDiv.innerHTML = `<span>${resultNation.icon}</span> ${resultNation.name}`;
-                } else {
-                    resultDiv.innerHTML = `<span>⚡</span> Ошибка выбора`;
-                }
-            }
-
             chooseBtn.addEventListener('click', chooseNation);
 
             // Инициализация
@@ -503,6 +722,8 @@
             currentPersona = 'other';
             updatePersonaUI();
             igorSelect.value = igorChoice;
+            ivanSelect.value = ivanChoice;
+            nikitaSelect.value = nikitaChoice;
         })();
     </script>
 </body>
