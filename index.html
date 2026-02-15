@@ -3,11 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Выбор нации · Игра Престолов</title>
-    <!-- Шрифты и базовые стили -->
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700;900&family=Open+Sans:wght@300;400;600&display=swap" rel="stylesheet">
+    <title>Выбор нации - Игра Престолов</title>
     <style>
         * {
             margin: 0;
@@ -16,495 +12,648 @@
         }
 
         body {
-            background: #0a0c0f;
-            background-image: radial-gradient(circle at 25% 30%, rgba(180, 130, 50, 0.05) 0%, transparent 30%),
-                              linear-gradient(145deg, #0f1217 0%, #1a1e26 100%);
-            font-family: 'Open Sans', sans-serif;
-            color: #e4d9c6;
+            font-family: 'Times New Roman', serif;
+            background: linear-gradient(135deg, #0a0a0a 0%, #1a0a0a 50%, #2a0a0a 100%);
+            color: #e0d3c5;
             min-height: 100vh;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            padding: 20px;
-            position: relative;
             overflow-x: hidden;
+            position: relative;
         }
 
-        /* Текстурный оверлей */
         body::before {
-            content: "";
+            content: '';
             position: fixed;
-            top: 0; left: 0; width: 100%; height: 100%;
-            background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="100" height="100" viewBox="0 0 100 100"><filter id="noise"><feTurbulence type="fractalNoise" baseFrequency="0.8" numOctaves="1" stitchTiles="stitch"/></filter><rect width="100" height="100" filter="url(%23noise)" opacity="0.03"/></svg>');
-            pointer-events: none;
-            z-index: 0;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: 
+                url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="100" height="100" viewBox="0 0 100 100"><rect width="100" height="100" fill="%230a0a0a"/><path d="M0 0 L100 100 M100 0 L0 100" stroke="%23333" stroke-width="1"/></svg>'),
+                radial-gradient(circle at 10% 20%, rgba(139, 0, 0, 0.1) 0%, transparent 20%),
+                radial-gradient(circle at 90% 80%, rgba(139, 0, 0, 0.1) 0%, transparent 20%);
+            opacity: 0.7;
+            z-index: -1;
         }
 
         .container {
             max-width: 1200px;
-            width: 100%;
-            background: rgba(10, 12, 18, 0.7);
-            backdrop-filter: blur(3px);
-            border: 1px solid #463e2f;
-            box-shadow: 0 20px 40px rgba(0,0,0,0.8), 0 0 0 1px #8a7a5a inset;
-            border-radius: 32px;
-            padding: 40px 30px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        header {
+            text-align: center;
+            padding: 40px 20px;
             position: relative;
-            z-index: 2;
+            margin-bottom: 40px;
         }
 
         h1 {
-            font-family: 'Cinzel', serif;
-            font-weight: 700;
-            font-size: 2.5rem;
-            text-align: center;
-            letter-spacing: 4px;
-            text-shadow: 0 2px 5px #b8860b, 0 0 15px #8b5a2b;
+            font-size: 4rem;
+            font-weight: bold;
+            letter-spacing: 3px;
+            text-shadow: 0 0 20px rgba(255, 215, 0, 0.8),
+                         0 0 40px rgba(255, 215, 0, 0.6),
+                         0 0 60px rgba(255, 215, 0, 0.4);
+            color: #ffd700;
+            margin-bottom: 20px;
+            position: relative;
+            animation: titleGlow 2s ease-in-out infinite alternate;
+        }
+
+        @keyframes titleGlow {
+            from { text-shadow: 0 0 20px rgba(255, 215, 0, 0.8), 0 0 40px rgba(255, 215, 0, 0.6), 0 0 60px rgba(255, 215, 0, 0.4); }
+            to { text-shadow: 0 0 30px rgba(255, 215, 0, 1), 0 0 60px rgba(255, 215, 0, 0.8), 0 0 90px rgba(255, 215, 0, 0.6); }
+        }
+
+        .subtitle {
+            font-size: 1.2rem;
+            color: #b8860b;
+            margin-top: 10px;
+            letter-spacing: 2px;
+        }
+
+        .game-container {
+            background: rgba(20, 10, 5, 0.9);
+            border: 3px solid #8b0000;
+            border-radius: 15px;
+            padding: 30px;
+            box-shadow: 0 0 50px rgba(139, 0, 0, 0.5);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .game-container::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 5px;
+            background: linear-gradient(90deg, #8b0000, #ffd700, #8b0000);
+        }
+
+        .player-selection {
+            background: rgba(30, 15, 10, 0.8);
+            padding: 25px;
+            border-radius: 10px;
             margin-bottom: 30px;
-            color: #f5e6d3;
-            border-bottom: 2px solid #7a5d3c;
-            padding-bottom: 15px;
-            word-break: break-word;
+            border: 2px solid #8b0000;
         }
 
-        /* Переключатель персонажей */
-        .persona-selector {
-            display: flex;
-            flex-wrap: wrap;
-            justify-content: center;
-            gap: 20px 30px;
-            margin-bottom: 30px;
-            background: rgba(0,0,0,0.25);
-            padding: 20px 25px;
-            border-radius: 60px;
-            border: 1px solid #5f4e33;
-            box-shadow: inset 0 2px 5px rgba(0,0,0,0.5);
-        }
-
-        .persona-selector label {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            font-size: 1.3rem;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.2s;
-            padding: 5px 15px;
-            border-radius: 40px;
-            background: rgba(30, 25, 20, 0.6);
-            border: 1px solid transparent;
-        }
-
-        .persona-selector label:hover {
-            border-color: #c9a45b;
-            background: rgba(60, 45, 30, 0.8);
-            box-shadow: 0 0 15px #b8860b55;
-        }
-
-        .persona-selector input[type="radio"] {
-            accent-color: #b8860b;
-            width: 18px;
-            height: 18px;
-            cursor: pointer;
-        }
-
-        /* Панель Игоря */
-        #igorPanel {
-            background: #1e1a14;
-            border: 2px solid #735e3a;
-            border-radius: 40px;
-            padding: 25px 30px;
-            margin-bottom: 30px;
-            display: flex;
-            flex-wrap: wrap;
-            align-items: center;
-            justify-content: center;
-            gap: 20px 30px;
-            box-shadow: 0 0 20px #b8860b33;
-            transition: all 0.3s ease;
-        }
-
-        #igorPanel p {
+        .selection-title {
             font-size: 1.8rem;
-            font-family: 'Cinzel', serif;
-            color: #edd9b0;
-            text-shadow: 0 0 5px #b8860b;
-            display: flex;
-            align-items: center;
-            gap: 10px;
+            color: #ffd700;
+            margin-bottom: 20px;
+            text-align: center;
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
         }
 
-        #igorPanel select {
-            background: #2a241c;
-            border: 2px solid #9b7e55;
-            border-radius: 50px;
-            padding: 12px 25px;
-            font-size: 1.4rem;
-            font-weight: 600;
-            color: #f0dbb4;
-            outline: none;
+        .player-buttons {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin-top: 15px;
+        }
+
+        .player-btn {
+            background: linear-gradient(135deg, #8b0000 0%, #6b0000 100%);
+            color: #ffd700;
+            border: none;
+            padding: 15px 20px;
+            border-radius: 8px;
             cursor: pointer;
-            font-family: 'Cinzel', serif;
-            box-shadow: inset 0 2px 5px #00000055, 0 0 10px #b8860b77;
+            font-size: 1.1rem;
+            font-weight: bold;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
         }
 
-        #igorPanel select option {
-            background: #1f1a14;
-            color: #f0dbb4;
+        .player-btn:hover {
+            background: linear-gradient(135deg, #a52a2a 0%, #8b0000 100%);
+            transform: translateY(-2px);
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.4);
         }
 
-        /* Сетка наций */
+        .player-btn:active {
+            transform: translateY(0);
+        }
+
+        .player-btn.selected {
+            background: linear-gradient(135deg, #ffd700 0%, #e6c000 100%);
+            color: #8b0000;
+            box-shadow: 0 0 20px rgba(255, 215, 0, 0.6);
+        }
+
+        .player-btn::after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 0;
+            height: 0;
+            border-radius: 50%;
+            background: rgba(255, 215, 0, 0.3);
+            transform: translate(-50%, -50%);
+            transition: width 0.6s, height 0.6s;
+        }
+
+        .player-btn:hover::after {
+            width: 300px;
+            height: 300px;
+        }
+
+        .nations-selection {
+            background: rgba(30, 15, 10, 0.8);
+            padding: 25px;
+            border-radius: 10px;
+            margin-bottom: 30px;
+            border: 2px solid #8b0000;
+        }
+
         .nations-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
-            gap: 20px;
-            margin: 40px 0 30px;
+            gap: 15px;
+            margin-top: 20px;
         }
 
         .nation-card {
-            background: #1e1b16;
-            border: 2px solid #4f432f;
-            border-radius: 28px;
-            padding: 20px 12px 12px;
+            background: rgba(40, 20, 15, 0.7);
+            border: 2px solid #8b0000;
+            border-radius: 8px;
+            padding: 15px;
             text-align: center;
-            transition: all 0.2s ease;
-            box-shadow: 0 8px 0 #0a0806, 0 10px 20px black;
             cursor: pointer;
-            user-select: none;
+            transition: all 0.3s ease;
             position: relative;
-            backdrop-filter: blur(2px);
+            overflow: hidden;
         }
 
         .nation-card:hover {
-            transform: translateY(-4px);
-            border-color: #b6935c;
-            box-shadow: 0 12px 0 #0a0806, 0 15px 25px black, 0 0 20px #b8860b66;
+            transform: translateY(-3px);
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.4);
+            border-color: #ffd700;
         }
 
         .nation-card.excluded {
-            opacity: 0.5;
-            filter: grayscale(0.7);
-            border-color: #5a4a33;
-            box-shadow: 0 4px 0 #0a0806;
-            transform: translateY(4px);
+            opacity: 0.4;
+            background: rgba(20, 10, 5, 0.5);
+            cursor: not-allowed;
         }
 
         .nation-card.excluded:hover {
-            transform: translateY(0);
-            border-color: #8b6f42;
-        }
-
-        .nation-icon {
-            font-size: 4rem;
-            line-height: 1;
-            margin-bottom: 10px;
-            filter: drop-shadow(0 4px 4px black);
+            transform: none;
+            box-shadow: none;
+            border-color: #8b0000;
         }
 
         .nation-name {
-            font-family: 'Cinzel', serif;
-            font-weight: 700;
-            font-size: 1.3rem;
-            letter-spacing: 1px;
-            margin-bottom: 12px;
+            font-weight: bold;
+            font-size: 1.1rem;
+            margin-bottom: 8px;
+            color: #ffd700;
         }
 
-        .exclude-checkbox {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 6px;
-            font-size: 0.95rem;
-            color: #b8a27b;
-        }
-
-        .exclude-checkbox input[type="checkbox"] {
-            width: 18px;
-            height: 18px;
-            accent-color: #8b2a2a;
-            cursor: pointer;
-        }
-
-        /* Кнопка выбора */
-        .choose-btn {
-            display: block;
-            width: fit-content;
-            margin: 20px auto 30px;
-            background: linear-gradient(145deg, #2f2a1f, #16130e);
-            border: 3px solid #bfa36b;
-            color: #ffefd1;
-            font-family: 'Cinzel', serif;
-            font-size: 2rem;
-            font-weight: 900;
-            padding: 18px 60px;
-            border-radius: 60px;
-            letter-spacing: 5px;
-            cursor: pointer;
-            box-shadow: 0 10px 0 #0a0704, 0 15px 30px black, 0 0 25px #b8860b;
-            transition: all 0.1s ease;
-            text-transform: uppercase;
-        }
-
-        .choose-btn:active {
-            transform: translateY(8px);
-            box-shadow: 0 4px 0 #0a0704, 0 15px 30px black;
-        }
-
-        .choose-btn:hover {
-            background: linear-gradient(145deg, #3e3829, #201c14);
-            border-color: #e9c57f;
-            text-shadow: 0 0 10px gold;
-        }
-
-        /* Результат */
-        .result {
-            background: #0f0d09;
-            border: 3px solid #7f6a44;
-            border-radius: 50px;
-            padding: 25px 30px;
-            text-align: center;
+        .nation-symbol {
             font-size: 2.5rem;
-            font-family: 'Cinzel', serif;
-            font-weight: 700;
-            color: #f3dbb6;
-            box-shadow: inset 0 0 20px #2f2a1e, 0 10px 20px black;
-            margin-top: 20px;
+            margin-bottom: 10px;
+        }
+
+        .nation-description {
+            font-size: 0.85rem;
+            color: #b8860b;
+            line-height: 1.4;
+        }
+
+        .result-section {
+            background: rgba(30, 15, 10, 0.8);
+            padding: 30px;
+            border-radius: 10px;
+            border: 2px solid #8b0000;
+            text-align: center;
+            position: relative;
+        }
+
+        .result-title {
+            font-size: 2rem;
+            color: #ffd700;
+            margin-bottom: 20px;
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
+        }
+
+        .result-display {
+            min-height: 100px;
             display: flex;
             align-items: center;
             justify-content: center;
-            gap: 20px;
-            transition: all 0.4s;
-            min-height: 120px;
+            font-size: 3rem;
+            font-weight: bold;
+            color: #ffd700;
+            margin: 20px 0;
+            text-shadow: 0 0 20px rgba(255, 215, 0, 0.8);
+            transition: all 0.5s ease;
         }
 
-        .result span {
-            font-size: 4rem;
+        .roll-button {
+            background: linear-gradient(135deg, #8b0000 0%, #6b0000 100%);
+            color: #ffd700;
+            border: none;
+            padding: 20px 50px;
+            font-size: 1.5rem;
+            font-weight: bold;
+            border-radius: 10px;
+            cursor: pointer;
+            margin: 20px auto;
+            display: block;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.4);
         }
 
-        .result .nation-icon-large {
-            font-size: 5rem;
-            filter: drop-shadow(0 0 10px #b8860b);
+        .roll-button:hover {
+            background: linear-gradient(135deg, #a52a2a 0%, #8b0000 100%);
+            transform: scale(1.05);
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.5);
         }
 
-        /* Фоновая надпись для Матвея */
-        .matvey-message {
+        .roll-button:active {
+            transform: scale(0.98);
+        }
+
+        .roll-button::after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 0;
+            height: 0;
+            border-radius: 50%;
+            background: rgba(255, 215, 0, 0.3);
+            transform: translate(-50%, -50%);
+            transition: width 0.6s, height 0.6s;
+        }
+
+        .roll-button:hover::after {
+            width: 500px;
+            height: 500px;
+        }
+
+        .igor-message {
+            background: linear-gradient(135deg, #8b0000 0%, #6b0000 100%);
+            color: #ffd700;
+            padding: 20px;
+            border-radius: 10px;
+            margin: 20px 0;
+            text-align: center;
+            font-size: 1.3rem;
+            font-weight: bold;
+            border: 2px solid #ffd700;
+            box-shadow: 0 0 20px rgba(255, 215, 0, 0.4);
+            display: none;
+        }
+
+        .igor-message::after {
+            content: '❤️';
+            margin-left: 10px;
+            animation: heartbeat 1s ease-in-out infinite;
+        }
+
+        @keyframes heartbeat {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.2); }
+        }
+
+        .igor-selection {
+            display: none;
+            margin: 20px 0;
+            padding: 20px;
+            background: rgba(40, 20, 15, 0.8);
+            border-radius: 10px;
+            border: 2px solid #8b0000;
+        }
+
+        .igor-selection select {
+            width: 100%;
+            padding: 12px;
+            font-size: 1.1rem;
+            background: rgba(30, 15, 10, 0.9);
+            color: #ffd700;
+            border: 2px solid #8b0000;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        .hidden-message {
             position: fixed;
-            bottom: 20px;
-            right: 30px;
-            font-size: 6rem;
-            font-weight: 900;
-            color: #7a5a2e;
-            text-transform: uppercase;
-            opacity: 0.08;
-            pointer-events: none;
-            z-index: 10;
-            font-family: 'Cinzel', serif;
-            white-space: nowrap;
+            bottom: 10px;
+            right: 10px;
+            font-size: 0.7rem;
+            color: rgba(139, 0, 0, 0.3);
+            opacity: 0.3;
             transform: rotate(-5deg);
-            letter-spacing: 12px;
-            transition: opacity 0.3s;
-            text-shadow: 0 0 10px black;
+            pointer-events: none;
+            transition: opacity 0.3s ease;
         }
 
-        .matvey-message.visible {
-            opacity: 0.2;
+        .hidden-message:hover {
+            opacity: 1;
         }
 
-        /* Адаптация */
-        @media (max-width: 650px) {
-            .container { padding: 25px 15px; }
-            h1 { font-size: 1.8rem; }
-            .persona-selector label { font-size: 1rem; }
-            .choose-btn { font-size: 1.6rem; padding: 14px 30px; }
-            .matvey-message { font-size: 3rem; bottom: 10px; right: 10px; }
-            .nation-icon { font-size: 3rem; }
+        .glow {
+            animation: glow 1.5s ease-in-out infinite alternate;
+        }
+
+        @keyframes glow {
+            from { box-shadow: 0 0 10px rgba(255, 215, 0, 0.6); }
+            to { box-shadow: 0 0 30px rgba(255, 215, 0, 1); }
+        }
+
+        .fade-in {
+            animation: fadeIn 0.5s ease-in;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @media (max-width: 768px) {
+            h1 {
+                font-size: 2.5rem;
+            }
+            
+            .player-buttons {
+                grid-template-columns: 1fr;
+            }
+            
+            .nations-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            
+            .roll-button {
+                padding: 15px 30px;
+                font-size: 1.2rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            h1 {
+                font-size: 2rem;
+            }
+            
+            .nations-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .container {
+                padding: 10px;
+            }
+            
+            .game-container {
+                padding: 15px;
+            }
+        }
+
+        /* Стили для анимации результата */
+        @keyframes resultAnimation {
+            0% { transform: scale(0.8); opacity: 0; }
+            50% { transform: scale(1.1); opacity: 1; }
+            100% { transform: scale(1); opacity: 1; }
+        }
+
+        .result-animation {
+            animation: resultAnimation 0.6s ease-out;
         }
     </style>
 </head>
 <body>
     <div class="container">
-        <h1>Железный трон ждёт</h1>
+        <header>
+            <h1>ИГРА ПРЕСТОЛОВ</h1>
+            <div class="subtitle">Выбор нации для настольной игры</div>
+        </header>
 
-        <!-- Кто играет -->
-        <div class="persona-selector">
-            <label><input type="radio" name="persona" value="stepa"> 👑 Степа</label>
-            <label><input type="radio" name="persona" value="igor"> ⚔️ Игорь</label>
-            <label><input type="radio" name="persona" value="matvey"> 🐉 Матвей</label>
-            <label><input type="radio" name="persona" value="other" checked> 🌍 Другой</label>
+        <div class="game-container">
+            <div class="player-selection">
+                <div class="selection-title">Выберите игрока:</div>
+                <div class="player-buttons">
+                    <button class="player-btn" data-player="stepa">Я - Степа</button>
+                    <button class="player-btn" data-player="igor">Я - Игорь</button>
+                    <button class="player-btn" data-player="matvey">Я - Матвей</button>
+                    <button class="player-btn selected" data-player="other">Я - Кто-то другой</button>
+                </div>
+            </div>
+
+            <div class="nations-selection">
+                <div class="selection-title">Выберите нации для игры:</div>
+                <div class="nations-grid">
+                    <div class="nation-card" data-nation="aarons">
+                        <div class="nation-symbol">⚔️</div>
+                        <div class="nation-name">Аароны</div>
+                        <div class="nation-description">Воинственные племена севера</div>
+                    </div>
+                    <div class="nation-card" data-nation="greyjoys">
+                        <div class="nation-symbol">⚓</div>
+                        <div class="nation-name">Грейджои</div>
+                        <div class="nation-description">Повелители Железных островов</div>
+                    </div>
+                    <div class="nation-card" data-nation="lannisters">
+                        <div class="nation-symbol">🦁</div>
+                        <div class="nation-name">Ланистеры</div>
+                        <div class="nation-description">Богатейший дом Вестероса</div>
+                    </div>
+                    <div class="nation-card" data-nation="starks">
+                        <div class="nation-symbol">🐺</div>
+                        <div class="nation-name">Старки</div>
+                        <div class="nation-description">Правители Севера</div>
+                    </div>
+                    <div class="nation-card" data-nation="martells">
+                        <div class="nation-symbol">🐍</div>
+                        <div class="nation-name">Мартеллы</div>
+                        <div class="nation-description">Правители Дорна</div>
+                    </div>
+                    <div class="nation-card" data-nation="tyrells">
+                        <div class="nation-symbol">🌹</div>
+                        <div class="nation-name">Тиреллы</div>
+                        <div class="nation-description">Правители Сумеречной долины</div>
+                    </div>
+                    <div class="nation-card" data-nation="baratheons">
+                        <div class="nation-symbol">🦌</div>
+                        <div class="nation-name">Баратеоны</div>
+                        <div class="nation-description">Правители Штормовых земель</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="igor-message" id="igorMessage">
+                Игорь, родной, Спасибо, что пришел
+            </div>
+
+            <div class="igor-selection" id="igorSelection">
+                <select id="igorNationSelect">
+                    <option value="">Выберите нацию...</option>
+                    <option value="aarons">Аароны</option>
+                    <option value="greyjoys">Грейджои</option>
+                    <option value="lannisters">Ланистеры</option>
+                    <option value="starks">Старки</option>
+                    <option value="martells">Мартеллы</option>
+                    <option value="tyrells">Тиреллы</option>
+                    <option value="baratheons">Баратеоны</option>
+                </select>
+            </div>
+
+            <div class="result-section">
+                <div class="result-title">Ваша нация:</div>
+                <div class="result-display" id="resultDisplay">----</div>
+                <button class="roll-button" id="rollButton">БРОСИТЬ КУБИК</button>
+            </div>
         </div>
 
-        <!-- Панель для Игоря (изначально скрыта) -->
-        <div id="igorPanel" style="display: none;">
-            <p>Игорь, родной, спасибо, что пришёл ❤️</p>
-            <select id="igorSelect">
-                <option value="arryn">Аррены</option>
-                <option value="greyjoy">Грейджои</option>
-                <option value="lannister">Ланнистеры</option>
-                <option value="stark">Старки</option>
-                <option value="martell">Мартеллы</option>
-                <option value="tyrell">Тиреллы</option>
-                <option value="baratheon">Баратеоны</option>
-            </select>
-        </div>
-
-        <!-- Карточки наций (заполнятся скриптом) -->
-        <div class="nations-grid" id="nationsGrid"></div>
-
-        <!-- Главная кнопга -->
-        <button class="choose-btn" id="chooseBtn">Избрать</button>
-
-        <!-- Блок результата -->
-        <div class="result" id="result">🦁❓</div>
+        <div class="hidden-message" id="hiddenMessage">Опять сосатб</div>
     </div>
 
-    <!-- Надпись для Матвея (изначально скрыта) -->
-    <div class="matvey-message" id="matveyMessage">ОПЯТЬ СОСАТБ</div>
-
     <script>
-        (function() {
-            // ---------- ДАННЫЕ ----------
-            const nationsData = [
-                { id: 'arryn', name: 'Аррены', icon: '🦅' },
-                { id: 'greyjoy', name: 'Грейджои', icon: '🦑' },
-                { id: 'lannister', name: 'Ланнистеры', icon: '🦁' },
-                { id: 'stark', name: 'Старки', icon: '🐺' },
-                { id: 'martell', name: 'Мартеллы', icon: '☀️' },
-                { id: 'tyrell', name: 'Тиреллы', icon: '🌹' },
-                { id: 'baratheon', name: 'Баратеоны', icon: '🦌' }
-            ];
+        document.addEventListener('DOMContentLoaded', function() {
+            const playerButtons = document.querySelectorAll('.player-btn');
+            const nationCards = document.querySelectorAll('.nation-card');
+            const rollButton = document.getElementById('rollButton');
+            const resultDisplay = document.getElementById('resultDisplay');
+            const igorMessage = document.getElementById('igorMessage');
+            const igorSelection = document.getElementById('igorSelection');
+            const igorNationSelect = document.getElementById('igorNationSelect');
+            const hiddenMessage = document.getElementById('hiddenMessage');
 
-            // Состояние: каждая нация + флаг excluded
-            let nations = nationsData.map(n => ({ ...n, excluded: false }));
+            let currentPlayer = 'other';
+            let excludedNations = new Set();
+            let igorSelectedNation = null;
 
-            // Текущий персонаж
-            let currentPersona = 'other';  // 'stepa', 'igor', 'matvey', 'other'
+            // Обработчик выбора игрока
+            playerButtons.forEach(button => {
+                button.addEventListener('click', function() {
+                    playerButtons.forEach(btn => btn.classList.remove('selected'));
+                    this.classList.add('selected');
+                    currentPlayer = this.dataset.player;
 
-            // Выбор Игоря (id нации)
-            let igorChoice = 'lannister';  // по умолчанию
-
-            // ---------- ЭЛЕМЕНТЫ ----------
-            const nationsGrid = document.getElementById('nationsGrid');
-            const igorPanel = document.getElementById('igorPanel');
-            const igorSelect = document.getElementById('igorSelect');
-            const matveyMsg = document.getElementById('matveyMessage');
-            const resultDiv = document.getElementById('result');
-            const chooseBtn = document.getElementById('chooseBtn');
-            const personaRadios = document.querySelectorAll('input[name="persona"]');
-
-            // ---------- ОТРИСОВКА КАРТОЧЕК НАЦИЙ ----------
-            function renderNations() {
-                nationsGrid.innerHTML = '';
-                nations.forEach((nation, index) => {
-                    const card = document.createElement('div');
-                    card.className = `nation-card ${nation.excluded ? 'excluded' : ''}`;
-                    card.dataset.id = nation.id;
-
-                    card.innerHTML = `
-                        <div class="nation-icon">${nation.icon}</div>
-                        <div class="nation-name">${nation.name}</div>
-                        <div class="exclude-checkbox">
-                            <label>
-                                <input type="checkbox" ${nation.excluded ? 'checked' : ''} data-id="${nation.id}"> Исключить
-                            </label>
-                        </div>
-                    `;
-
-                    // Обработчик на чекбокс внутри карточки
-                    const checkbox = card.querySelector('input[type="checkbox"]');
-                    checkbox.addEventListener('change', (e) => {
-                        e.stopPropagation();
-                        const id = e.target.dataset.id;
-                        const nation = nations.find(n => n.id === id);
-                        if (nation) {
-                            nation.excluded = e.target.checked;
-                        }
-                        // Обновляем класс карточки
-                        renderNations(); // перерисовка для синхронизации отображения
-                    });
-
-                    nationsGrid.appendChild(card);
-                });
-            }
-
-            // ---------- ОБНОВЛЕНИЕ UI В ЗАВИСИМОСТИ ОТ ПЕРСОНАЖА ----------
-            function updatePersonaUI() {
-                // Прячем всё, потом показываем нужное
-                igorPanel.style.display = 'none';
-                matveyMsg.classList.remove('visible');
-
-                if (currentPersona === 'igor') {
-                    igorPanel.style.display = 'flex';  // блок Игоря виден
-                } else if (currentPersona === 'matvey') {
-                    matveyMsg.classList.add('visible'); // фоновая надпись
-                }
-                // для stepa и other ничего дополнительно не нужно
-            }
-
-            // ---------- СОХРАНЕНИЕ ВЫБОРА ИГОРЯ ----------
-            igorSelect.addEventListener('change', (e) => {
-                igorChoice = e.target.value;
-            });
-
-            // ---------- СЛУШАТЕЛИ НА РАДИОКНОПКИ ПЕРСОНАЖЕЙ ----------
-            personaRadios.forEach(radio => {
-                radio.addEventListener('change', (e) => {
-                    currentPersona = e.target.value;
-                    updatePersonaUI();
-                });
-            });
-
-            // ---------- ГЛАВНАЯ ФУНКЦИЯ ВЫБОРА ----------
-            function chooseNation() {
-                let resultNation = null;
-
-                if (currentPersona === 'stepa') {
-                    // Степа всегда получает Старков (даже если исключены)
-                    resultNation = nations.find(n => n.id === 'stark');
-                } 
-                else if (currentPersona === 'igor') {
-                    // Игорь выбирает сам (из селекта, все нации доступны)
-                    resultNation = nations.find(n => n.id === igorChoice);
-                } 
-                else if (currentPersona === 'matvey') {
-                    // Матвей всегда Ланнистеры
-                    resultNation = nations.find(n => n.id === 'lannister');
-                } 
-                else { // other
-                    // Случайный выбор среди НЕ исключённых
-                    const available = nations.filter(n => !n.excluded);
-                    if (available.length === 0) {
-                        resultDiv.innerHTML = `<span>❌</span> Нет доступных наций (все исключены)`;
-                        return;
+                    // Скрыть/показать элементы в зависимости от игрока
+                    if (currentPlayer === 'igor') {
+                        igorMessage.style.display = 'block';
+                        igorSelection.style.display = 'block';
+                    } else {
+                        igorMessage.style.display = 'none';
+                        igorSelection.style.display = 'none';
+                        igorSelectedNation = null;
                     }
-                    const randomIndex = Math.floor(Math.random() * available.length);
-                    resultNation = available[randomIndex];
-                }
 
-                // Если по какой-то причине resultNation === null (например, Старков нет в массиве? но они есть)
-                if (resultNation) {
-                    resultDiv.innerHTML = `<span>${resultNation.icon}</span> ${resultNation.name}`;
-                } else {
-                    resultDiv.innerHTML = `<span>⚡</span> Ошибка выбора`;
-                }
+                    // Показать скрытое сообщение для Матвея
+                    if (currentPlayer === 'matvey') {
+                        hiddenMessage.style.opacity = '0.3';
+                        hiddenMessage.style.display = 'block';
+                    } else {
+                        hiddenMessage.style.display = 'none';
+                    }
+
+                    // Сбросить результат
+                    resultDisplay.textContent = '----';
+                    resultDisplay.classList.remove('result-animation');
+                });
+            });
+
+            // Обработчик выбора нации для исключения
+            nationCards.forEach(card => {
+                card.addEventListener('click', function() {
+                    const nation = this.dataset.nation;
+                    
+                    if (this.classList.contains('excluded')) {
+                        this.classList.remove('excluded');
+                        excludedNations.delete(nation);
+                    } else {
+                        this.classList.add('excluded');
+                        excludedNations.add(nation);
+                    }
+                });
+            });
+
+            // Обработчик выбора нации для Игоря
+            igorNationSelect.addEventListener('change', function() {
+                igorSelectedNation = this.value;
+            });
+
+            // Обработчик броска кубика
+            rollButton.addEventListener('click', function() {
+                // Очистить предыдущую анимацию
+                resultDisplay.classList.remove('result-animation');
+                
+                // Показать анимацию броска
+                resultDisplay.textContent = '🎲';
+                resultDisplay.classList.add('result-animation');
+
+                // Задержка для эффекта броска
+                setTimeout(() => {
+                    let resultNation;
+                    
+                    // Логика выбора нации в зависимости от игрока
+                    if (currentPlayer === 'stepa') {
+                        // Степа всегда получает Старков
+                        resultNation = 'starks';
+                    } else if (currentPlayer === 'igor') {
+                        // Игорь выбирает сам
+                        if (igorSelectedNation) {
+                            resultNation = igorSelectedNation;
+                        } else {
+                            resultDisplay.textContent = 'Выберите нацию!';
+                            return;
+                        }
+                    } else if (currentPlayer === 'matvey') {
+                        // Матвей всегда получает Ланистеров
+                        resultNation = 'lannisters';
+                    } else {
+                        // Обычный рандомный выбор
+                        const availableNations = Array.from(document.querySelectorAll('.nation-card:not(.excluded)'))
+                            .map(card => card.dataset.nation);
+                        
+                        if (availableNations.length === 0) {
+                            resultDisplay.textContent = 'Выберите хотя бы одну нацию!';
+                            return;
+                        }
+                        
+                        const randomIndex = Math.floor(Math.random() * availableNations.length);
+                        resultNation = availableNations[randomIndex];
+                    }
+                    
+                    // Показать результат
+                    displayResult(resultNation);
+                }, 800);
+            });
+
+            // Функция отображения результата
+            function displayResult(nationKey) {
+                const nationNames = {
+                    'aarons': 'Аароны',
+                    'greyjoys': 'Грейджои',
+                    'lannisters': 'Ланистеры',
+                    'starks': 'Старки',
+                    'martells': 'Мартеллы',
+                    'tyrells': 'Тиреллы',
+                    'baratheons': 'Баратеоны'
+                };
+
+                resultDisplay.textContent = nationNames[nationKey];
+                resultDisplay.classList.add('result-animation');
+                resultDisplay.classList.add('glow');
+                
+                // Убрать свечение через 2 секунды
+                setTimeout(() => {
+                    resultDisplay.classList.remove('glow');
+                }, 2000);
             }
 
-            // ---------- ОБРАБОТЧИК КНОПКИ ----------
-            chooseBtn.addEventListener('click', chooseNation);
-
-            // ---------- ИНИЦИАЛИЗАЦИЯ ----------
-            renderNations();
-
-            // Установим начальное состояние персонажа (other активно по умолчанию)
-            currentPersona = 'other';
-            updatePersonaUI();
-
-            // Синхронизируем igorSelect с igorChoice (в селекте уже стоит Lannister по умолчанию)
-            igorSelect.value = igorChoice;
-
-            // Добавим небольшой эффект при загрузке: покажем случайный результат (опционально)
-            // но оставим поле пустым или с приветствием
-            resultDiv.innerHTML = `<span>🏰</span> Сделайте выбор`;
-        })();
+            // Инициализация - выбрать "Кто-то другой" по умолчанию
+            document.querySelector('[data-player="other"]').click();
+        });
     </script>
 </body>
 </html>
